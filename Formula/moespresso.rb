@@ -248,14 +248,15 @@ class Moespresso < Formula
 
     venv = virtualenv_create(libexec, "python3.14", system_site_packages: false)
     build_resources = %w[hatchling nanobind packaging pathspec pluggy setuptools trove-classifiers]
-    build_resources.each do |name|
-      venv.pip_install resource(name).cached_download
+    python_resources = build_resources.map { |name| resource(name) }
+    python_resources += resources.reject do |resource|
+      resource.name == "mlx-kquant" || build_resources.include?(resource.name)
     end
-
-    resources.each do |resource|
-      next if resource.name == "mlx-kquant" || build_resources.include?(resource.name)
-
-      venv.pip_install resource.cached_download, build_isolation: false
+    python_resources.each do |resource|
+      resource.stage do
+        source = resource.url.end_with?(".whl") ? Pathname.pwd/resource.downloader.basename : Pathname.pwd
+        venv.pip_install source, build_isolation: false
+      end
     end
 
     resource("mlx-kquant").stage do
