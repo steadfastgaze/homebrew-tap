@@ -1,44 +1,59 @@
-name: brew pr-pull
+name: brew release
 
 on:
   workflow_dispatch:
     inputs:
-      pull_request:
-        description: Pull request number
+      formula:
+        description: Formula to release
         required: true
-      head_sha:
-        description: Expected pull request head commit SHA (optional)
+        default: moespresso
 
 jobs:
-  pr-pull:
-    runs-on: ubuntu-latest
+  release:
+    runs-on: macos-26
     permissions:
       actions: read
       checks: read
       contents: write
-      issues: read
-      pull-requests: write
     steps:
       - name: Set up Homebrew
+        id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Cache Homebrew Bundler RubyGems
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: macos-26-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: macos-26-rubygems-
+
+      - run: brew test-bot --only-cleanup-before
+
+      - run: brew test-bot --only-setup
+
+      - run: brew test-bot --only-tap-syntax
+
+      - name: Ensure the Metal toolchain is available
+        run: |
+          if ! xcrun metal -v; then
+            xcodebuild -downloadComponent MetalToolchain
+          fi
+          xcrun metal -v
+
+      - name: Build and test the bottle
+        env:
+          FORMULA: ${{ inputs.formula }}
+        run: brew test-bot --only-formulae --testing-formulae="$FORMULA"
+
       - name: Set up git
         uses: Homebrew/actions/git-user-config@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1
 
-      - name: Pull bottles
+      - name: Publish the bottle
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HEAD_SHA: ${{ inputs.head_sha }}
-          PULL_REQUEST: ${{ inputs.pull_request }}
-        run: |
-          if [[ -n "$HEAD_SHA" ]]
-          then
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --head-sha="$HEAD_SHA" "$PULL_REQUEST"
-          else
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
-          fi
+        run: brew pr-upload --debug
 
       - name: Push commits
         uses: Homebrew/actions/git-try-push@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1

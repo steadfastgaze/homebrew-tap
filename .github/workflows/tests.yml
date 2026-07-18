@@ -1,19 +1,15 @@
-name: brew test-bot
+name: brew syntax
 
 on:
   push:
     branches:
       - main
-  pull_request:
-
 jobs:
-  test-bot:
+  syntax:
     runs-on: macos-26
     permissions:
       actions: read
-      checks: read
       contents: read
-      pull-requests: read
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
@@ -33,21 +29,3 @@ jobs:
       - run: brew test-bot --only-setup
 
       - run: brew test-bot --only-tap-syntax
-
-      - name: Ensure the Metal toolchain is available
-        if: github.event_name == 'pull_request'
-        run: |
-          if ! xcrun metal -v; then
-            xcodebuild -downloadComponent MetalToolchain
-          fi
-          xcrun metal -v
-
-      - run: brew test-bot --only-formulae
-        if: github.event_name == 'pull_request'
-
-      - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v7
-        with:
-          name: bottles_macos-26
-          path: '*.bottle.*'
