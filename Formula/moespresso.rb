@@ -20,6 +20,12 @@ class Moespresso < Formula
       revision: "469f389849fe435d053db0878434a57b9031ab4e"
   license any_of: ["MIT", "Apache-2.0"]
 
+  bottle do
+    root_url "https://github.com/steadfastgaze/homebrew-tap/releases/download/moespresso-1.1.0"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe: "3c56d478aa194ce7384d43a18f839296b6a233b471cae95f71e8b17952691ad6"
+  end
+
   depends_on "cmake" => :build
   depends_on xcode: ["26.4.1", :build]
   depends_on arch: :arm64
