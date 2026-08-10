@@ -16,8 +16,8 @@ class Moespresso < Formula
   desc "Run large mixture-of-experts language models on Apple Silicon"
   homepage "https://github.com/steadfastgaze/MoEspresso"
   url "https://github.com/steadfastgaze/MoEspresso.git",
-      tag:      "v1.1.0",
-      revision: "469f389849fe435d053db0878434a57b9031ab4e"
+      tag:      "v2.0.0",
+      revision: "6822583c4d4c10f606f29778036245627ba380b4"
   license any_of: ["MIT", "Apache-2.0"]
 
   bottle do
@@ -129,9 +129,14 @@ class Moespresso < Formula
     sha256 "59ccbd0f0044d4f97f11ebcbf0c480bc9e962935fd96275f120954afea65be8a"
   end
 
+  resource "mlx-iqk" do
+    url "https://files.pythonhosted.org/packages/03/7b/9c8fe25e49571cc9ce58a820a547a91ad7f275ee5c8d9ddc424227de775a/mlx_iqk-0.1.2-py3-none-any.whl"
+    sha256 "97f130dcaabf0e2c913ff6b2186799996739cbfb402d29c2eaa67c64914066b3"
+  end
+
   resource "mlx-kquant" do
     url "https://github.com/steadfastgaze/mlx-kquant.git",
-        revision: "e165cafafa149493d298871c610e29e95ffa8f10"
+        revision: "6fbfd4f5c925c7ce8dc8239ac7d8e2783d49f089"
   end
 
   resource "mlx-lm" do
@@ -293,6 +298,9 @@ class Moespresso < Formula
 
   test do
     assert_match "usage:", shell_output("#{bin}/moespresso-generate --help")
+
+    system libexec/"bin/python", "-c",
+           "import mlx_iqk; assert 'iq2_k' in mlx_iqk.MEMBERS and 'iq2_ks' in mlx_iqk.MEMBERS"
 
     system libexec/"bin/python", "-c", "import mlx_kquant as kq; assert kq.metallib_loads()"
 
