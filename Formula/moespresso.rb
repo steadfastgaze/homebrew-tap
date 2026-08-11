@@ -274,7 +274,7 @@ class Moespresso < Formula
       venv.pip_install Pathname.pwd, build_isolation: false
     end
 
-    venv.pip_install_and_link buildpath, build_isolation: false
+    venv.pip_install buildpath, build_isolation: false
 
     gate_build = buildpath/"native/gate/build-homebrew"
     system "cmake", "-S", "native/gate", "-B", gate_build,
@@ -289,15 +289,27 @@ class Moespresso < Formula
     native_dir = libexec/"native"
     native_dir.install gate
 
-    bin.children.each do |script|
-      target = script.realpath
-      script.unlink
-      script.write_env_script target, MOESPRESSO_NATIVE_DIR: native_dir
+    user_commands = %w[moespresso-serve moespresso-generate moespresso-verify]
+    user_commands.unshift("moespresso") if (libexec/"bin/moespresso").exist?
+    user_commands.each do |command|
+      target = libexec/"bin"/command
+      odie "installed package has no #{command} command" unless target.exist?
+
+      (bin/command).write_env_script target, MOESPRESSO_NATIVE_DIR: native_dir
     end
   end
 
   test do
-    assert_match "usage:", shell_output("#{bin}/moespresso-generate --help")
+    command = (bin/"moespresso").exist? ? "moespresso" : "moespresso-serve"
+    assert_match "usage:", shell_output("#{bin}/#{command} --help")
+    assert_predicate bin/"moespresso-serve", :executable?
+    assert_predicate bin/"moespresso-generate", :executable?
+    assert_predicate bin/"moespresso-verify", :executable?
+    if (bin/"moespresso").exist?
+      assert_match version.to_s, shell_output("#{bin}/moespresso --version")
+      assert_equal %w[moespresso moespresso-generate moespresso-serve moespresso-verify],
+                   bin.children.map { |path| path.basename.to_s }.sort
+    end
 
     system libexec/"bin/python", "-c",
            "import mlx_iqk; assert 'iq2_k' in mlx_iqk.MEMBERS and 'iq2_ks' in mlx_iqk.MEMBERS"
