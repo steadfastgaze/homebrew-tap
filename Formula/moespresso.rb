@@ -16,15 +16,9 @@ class Moespresso < Formula
   desc "Run large mixture-of-experts language models on Apple Silicon"
   homepage "https://github.com/steadfastgaze/MoEspresso"
   url "https://github.com/steadfastgaze/MoEspresso.git",
-      tag:      "v2.1.1",
-      revision: "a10ce92ece10978da19c42f156b8556001182a03"
+      tag:      "v2.1.2",
+      revision: "a75dc441b2c6e02a53bae091d8e1245192b14316"
   license any_of: ["MIT", "Apache-2.0"]
-
-  bottle do
-    root_url "https://github.com/steadfastgaze/homebrew-tap/releases/download/moespresso-2.1.1"
-    rebuild 1
-    sha256 cellar: :any, arm64_tahoe: "1f156a73ed24e1f42ad3cd0ab2fb5edff879b38328b4dce1d201999241883a37"
-  end
 
   depends_on "cmake" => :build
   depends_on xcode: ["26.4.1", :build]
