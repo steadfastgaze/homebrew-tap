@@ -16,15 +16,9 @@ class Moespresso < Formula
   desc "Run large mixture-of-experts language models on Apple Silicon"
   homepage "https://github.com/steadfastgaze/MoEspresso"
   url "https://github.com/steadfastgaze/MoEspresso.git",
-      tag:      "v2.1.2",
-      revision: "a75dc441b2c6e02a53bae091d8e1245192b14316"
+      tag:      "v3.0.0",
+      revision: "6b96f274474a64c5ca92e4e5f2f96dc7a684e610"
   license any_of: ["MIT", "Apache-2.0"]
-
-  bottle do
-    root_url "https://github.com/steadfastgaze/homebrew-tap/releases/download/moespresso-2.1.2"
-    rebuild 1
-    sha256 cellar: :any, arm64_tahoe: "7f09596c6d95c005dc6f46af65959a6924ae2ded5ee64788db6a5a5d8ea1ea70"
-  end
 
   depends_on "cmake" => :build
   depends_on xcode: ["26.4.1", :build]
@@ -67,11 +61,6 @@ class Moespresso < Formula
   resource "h11" do
     url "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl"
     sha256 "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"
-  end
-
-  resource "hatchling" do
-    url "https://files.pythonhosted.org/packages/64/e2/2c0af0a52d16be74a4f194564fcdc417521ed863e9b65e4bc9052dacba6f/hatchling-1.31.0-py3-none-any.whl"
-    sha256 "aac80bec8b6fe35e8480f1c335be8910fa210a0e6f735a139be205dadcacb544"
   end
 
   resource "hf-xet" do
@@ -130,13 +119,13 @@ class Moespresso < Formula
   end
 
   resource "mlx-iqk" do
-    url "https://files.pythonhosted.org/packages/03/7b/9c8fe25e49571cc9ce58a820a547a91ad7f275ee5c8d9ddc424227de775a/mlx_iqk-0.1.2-py3-none-any.whl"
-    sha256 "97f130dcaabf0e2c913ff6b2186799996739cbfb402d29c2eaa67c64914066b3"
+    url "https://files.pythonhosted.org/packages/8a/5c/fa68a7d1ac7737aa92eefe4b2bd83397000d29c0fb177c0c9bbb35686f6f/mlx_iqk-0.1.3-py3-none-any.whl"
+    sha256 "eb2f2dae7b44e99b46643abdc1e5fffeda84b1f4ba61df25a0aebcec400d18cf"
   end
 
   resource "mlx-kquant" do
     url "https://github.com/steadfastgaze/mlx-kquant.git",
-        revision: "6fbfd4f5c925c7ce8dc8239ac7d8e2783d49f089"
+        revision: "c4928ba74b6b119c3613e1ec68ef85d2238c636b"
   end
 
   resource "mlx-lm" do
@@ -167,11 +156,6 @@ class Moespresso < Formula
   resource "pathspec" do
     url "https://files.pythonhosted.org/packages/f1/d9/7fb5aa316bc299258e68c73ba3bddbc499654a07f151cba08f6153988714/pathspec-1.1.1-py3-none-any.whl"
     sha256 "a00ce642f577bf7f473932318056212bc4f8bfdf53128c78bbd5af0b9b20b189"
-  end
-
-  resource "pluggy" do
-    url "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl"
-    sha256 "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
   end
 
   resource "protobuf" do
@@ -209,6 +193,11 @@ class Moespresso < Formula
     sha256 "94fd4858284736bb67a897a41608b5b0c2496c9bdb3bf2af1fa3409127f20d57"
   end
 
+  resource "scikit-build-core" do
+    url "https://files.pythonhosted.org/packages/b7/b0/7ad8fa9aebb0835b2e20afebf1483cbe175d1612fe01e85042ce9ced8755/scikit_build_core-1.0.3-py3-none-any.whl"
+    sha256 "ae95427b7d3c14a6cf8bbfd4d901f6138ab64c99e20cbe8ea7d75cd26093f085"
+  end
+
   resource "sentencepiece" do
     url "https://files.pythonhosted.org/packages/ea/99/bbe054ebb5a5039457c590e0a4156ed073fb0fe9ce4f7523404dd5b37463/sentencepiece-0.2.1-cp314-cp314-macosx_11_0_arm64.whl"
     sha256 "c83b85ab2d6576607f31df77ff86f28182be4a8de6d175d2c33ca609925f5da1"
@@ -239,11 +228,6 @@ class Moespresso < Formula
     sha256 "1d19509bcff7028ebc6b277d71caa712e8353778463d38764237d14b42b52788"
   end
 
-  resource "trove-classifiers" do
-    url "https://files.pythonhosted.org/packages/7c/a4/81502f486f01db95bc8320646a8a12511f5e556cb63d5e224d91816605c4/trove_classifiers-2026.6.1.19-py3-none-any.whl"
-    sha256 "ab4c4ec93cc4a4e7815fa759906e05e6bb3f2fbd92ea0f897288c6a43efd15b3"
-  end
-
   resource "typer" do
     url "https://files.pythonhosted.org/packages/3f/f9/2b3ff4e56e5fa7debfaf9eb135d0da96f3e9a1d5b27222223c7296336e5f/typer-0.25.1-py3-none-any.whl"
     sha256 "75caa44ed46a03fb2dab8808753ffacdbfea88495e74c85a28c5eefcf5f39c89"
@@ -258,7 +242,7 @@ class Moespresso < Formula
     ENV["MACOSX_DEPLOYMENT_TARGET"] = "26.2"
 
     venv = virtualenv_create(libexec, "python3.14", system_site_packages: false)
-    build_resources = %w[hatchling nanobind packaging pathspec pluggy setuptools trove-classifiers]
+    build_resources = %w[nanobind packaging pathspec scikit-build-core setuptools]
     python_resources = build_resources.map { |name| resource(name) }
     python_resources += resources.reject do |resource|
       resource.name == "mlx-kquant" || build_resources.include?(resource.name)
@@ -276,26 +260,13 @@ class Moespresso < Formula
 
     venv.pip_install buildpath, build_isolation: false
 
-    gate_build = buildpath/"native/gate/build-homebrew"
-    system "cmake", "-S", "native/gate", "-B", gate_build,
-                    "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=26.2",
-                    "-DPython_EXECUTABLE=#{libexec}/bin/python"
-    system "cmake", "--build", gate_build, "--parallel", ENV.make_jobs
-
-    gate = Dir[gate_build/"_moespresso_gate*.so"].first
-    odie "native gate build produced no extension" if gate.nil?
-
-    native_dir = libexec/"native"
-    native_dir.install gate
-
     user_commands = %w[moespresso-serve moespresso-generate moespresso-verify]
     user_commands.unshift("moespresso") if (libexec/"bin/moespresso").exist?
     user_commands.each do |command|
       target = libexec/"bin"/command
       odie "installed package has no #{command} command" unless target.exist?
 
-      (bin/command).write_env_script target, MOESPRESSO_NATIVE_DIR: native_dir
+      bin.install_symlink target
     end
   end
 
@@ -316,7 +287,6 @@ class Moespresso < Formula
 
     system libexec/"bin/python", "-c", "import mlx_kquant as kq; assert kq.metallib_loads()"
 
-    ENV["MOESPRESSO_NATIVE_DIR"] = libexec/"native"
     system libexec/"bin/python", "-c",
            "from moespresso.runtime.native_gate import load_gate; assert load_gate() is not None"
   end
