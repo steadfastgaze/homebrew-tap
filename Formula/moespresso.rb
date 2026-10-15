@@ -43,11 +43,14 @@ class Moespresso < Formula
     odie "Rust compiler-builtins license is missing" unless (rust_library/"compiler-builtins/LICENSE.txt").file?
 
     rust_notices = pkgshare/"licenses/rust"
-    rust_notices.install rust_docs/"COPYRIGHT-library.html", rust_docs/"licenses"
-    rust_notices.install rust/"LICENSE-MIT", rust/"LICENSE-APACHE"
+    rust_notices.mkpath
+    cp [rust_docs/"COPYRIGHT-library.html", rust/"LICENSE-MIT", rust/"LICENSE-APACHE"], rust_notices
+    cp_r rust_docs/"licenses", rust_notices
     rust_library.glob("**/{LICENSE*,COPYRIGHT*}").select(&:file?).each do |notice|
       relative = notice.relative_path_from(rust_library)
-      (rust_notices/"library"/relative.dirname).install notice
+      destination = rust_notices/"library"/relative.dirname
+      destination.mkpath
+      cp notice, destination
     end
     (rust_notices/"toolchain.txt").write Utils.safe_popen_read("rustc", "--version", "--verbose")
   end
