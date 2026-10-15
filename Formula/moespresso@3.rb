@@ -20,6 +20,12 @@ class MoespressoAT3 < Formula
       revision: "6b96f274474a64c5ca92e4e5f2f96dc7a684e610"
   license any_of: ["MIT", "Apache-2.0"]
 
+  bottle do
+    root_url "https://github.com/steadfastgaze/homebrew-tap/releases/download/moespresso@3-3.0.0"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe: "2680d823043a2134f65b2f70baa948a4ed61382932472bd9fb749ecd2e46c88b"
+  end
+
   keg_only :versioned_formula
 
   depends_on "cmake" => :build
