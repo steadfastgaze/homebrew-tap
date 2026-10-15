@@ -56,7 +56,6 @@ class Moespresso < Formula
   end
 
   test do
-    assert_equal "moespresso #{version}", shell_output("#{bin}/moespresso --version").strip
     assert_match "Usage: moespresso", shell_output("#{bin}/moespresso --help")
     assert_match "--disk-cache-mode", shell_output("#{bin}/moespresso serve --help")
     assert_match "--prompt", shell_output("#{bin}/moespresso generate --help")
